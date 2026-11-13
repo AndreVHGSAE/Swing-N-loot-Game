@@ -33,9 +33,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isWallDetected;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -101,9 +101,9 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded && isWallDetected)
         {
-            if (facingRight && movingInput < 0)
+            if (!facingRight && movingInput > 0)
                 Flip();
-            else if (!facingRight && movingInput < 0)
+            else if (facingRight && movingInput < 0)
                 Flip();
         }
 
