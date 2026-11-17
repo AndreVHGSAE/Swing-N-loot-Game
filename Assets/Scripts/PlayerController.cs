@@ -1,11 +1,15 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     public Animator anim;
     public Rigidbody2D rb;
+
+    public GameObject bullet;
+    //public List<GameObject> bulletPool = new List<GameObject>();
 
     [Header("Move Info")]
     [SerializeField] private float speed = 5;
@@ -37,6 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
+        //SetBulletPool(bullet, transform.position, bulletPool);
     }
 
     // Update is called once per frame
@@ -89,7 +95,51 @@ public class PlayerController : MonoBehaviour
 
         if (canMove == true)
             movingInput = Input.GetAxisRaw("Horizontal");
+
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            //GameObject temp = GetBullet();
+            GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
+            temp.SetActive(true);
+            temp.transform.position = transform.position;
+            temp.transform.rotation = transform.rotation;
+            Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
+            if (facingRight)
+            {
+                rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
+            }
+            else
+            {
+                rbtemp.AddForce(transform.right * -40, ForceMode2D.Impulse);
+            }
+        }
     }
+
+    //private void SetBulletPool(GameObject bulletPrefab, Vector3 startPosition, List<GameObject> _bulletPool)
+    //{
+    //    for (int i = 0; i < 10; i++)
+    //    {
+    //        GameObject temp = Instantiate(bulletPrefab, startPosition, transform.rotation);
+    //        temp.SetActive(false);
+    //        _bulletPool.Add(temp);
+    //    }
+    //}
+
+    //GameObject GetBullet()
+    //{
+    //    Debug.Log("GettingNormalBullet");
+
+    //    foreach (GameObject b in bulletPool)
+    //    {
+    //        if (b.activeInHierarchy == false)
+    //        {
+    //            return b;
+    //        }
+    //    }
+    //    GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
+    //    temp.SetActive(false);
+    //    return temp;
+    //}
 
     private void Move()
     {
