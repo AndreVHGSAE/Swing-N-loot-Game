@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
 
     public GameObject bullet;
+
+    public int coins;
     //public List<GameObject> bulletPool = new List<GameObject>();
 
     [Header("Move Info")]
@@ -22,7 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isWallSliding;
     
     public bool facingRight = true;
-    private float movingInput;
+    [SerializeField] private float movingInput;
     public int facingDirection = 1 ;
     [SerializeField] private Vector2 wallJumpDirection;
 
@@ -104,14 +106,7 @@ public class PlayerController : MonoBehaviour
             temp.transform.position = transform.position;
             temp.transform.rotation = transform.rotation;
             Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
-            if (facingRight)
-            {
-                rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
-            }
-            else
-            {
-                rbtemp.AddForce(transform.right * -40, ForceMode2D.Impulse);
-            }
+            rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
         }
     }
 
@@ -179,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
     private void WallJump()
     {
-        Vector2 direction = new Vector2(wallJumpDirection.x * -facingDirection, wallJumpDirection.y);
+        Vector2 direction = new Vector2(wallJumpDirection.x * -transform.right.x, wallJumpDirection.y);
 
         rb.AddForce(direction, ForceMode2D.Impulse);
     }
