@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    private void onTrigerEnter2D(Collider2D collision)
+    public int value = 1;
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if (collision.tag == "Player")
         {
-            collision.gameObject.GetComponent<PlayerController>().coins++;
+            collision.gameObject.GetComponent<PlayerController>().coins += value;
+            Destroy(this.gameObject);
         }
     }
 }

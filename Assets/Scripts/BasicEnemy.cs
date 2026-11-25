@@ -20,6 +20,7 @@ public class BasicEnemy : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private GameObject PlayerCheck;
 
     private bool groundDetected;
     private bool isWallDetected;
