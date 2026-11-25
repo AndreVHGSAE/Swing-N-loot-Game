@@ -17,7 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 5;
     [SerializeField] private float JumpForce = 8;
 
-    private bool canMove = true;
+    [SerializeField] private bool canMove = true;
+    [SerializeField] private float MoveLockTime = 0.5f;
+    private Coroutine LockRoutine;
 
     [SerializeField] private bool canWallSlide;
     [SerializeField] private bool canWallJump = true;
@@ -110,6 +112,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private IEnumerator MoveLock()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(MoveLockTime);
+        canMove = true;
+    }
+
     //private void SetBulletPool(GameObject bulletPrefab, Vector3 startPosition, List<GameObject> _bulletPool)
     //{
     //    for (int i = 0; i < 10; i++)
@@ -175,6 +184,15 @@ public class PlayerController : MonoBehaviour
     private void WallJump()
     {
         Vector2 direction = new Vector2(wallJumpDirection.x * -transform.right.x, wallJumpDirection.y);
+
+        rb.linearVelocity = Vector2.zero;
+
+        if (LockRoutine != null)
+        {
+            StopCoroutine(LockRoutine);
+        }
+
+        LockRoutine = StartCoroutine(MoveLock());
 
         rb.AddForce(direction, ForceMode2D.Impulse);
     }

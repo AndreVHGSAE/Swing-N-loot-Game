@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BasicEnemy : MonoBehaviour
 {
-
+    public GameObject Player;
     private Rigidbody2D rb;
     private Animator anim;
 
@@ -13,6 +13,8 @@ public class BasicEnemy : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float idleTime = 2;
     [SerializeField] private float idleTimeCounter;
+
+    public bool Agro = false;
 
     [Header("CollisionInfo")]
     [SerializeField] private float groundCheckDistance;
@@ -30,10 +32,20 @@ public class BasicEnemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
+
+        Agro = false;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        if (!Agro)
+            Patrol();
+        else
+            ChasePlayer();
+    }
+
+    void Patrol()
     {
         anim.SetFloat("xVelocity", rb.linearVelocity.x);
         CollisionCheck();
@@ -52,7 +64,23 @@ public class BasicEnemy : MonoBehaviour
         }
     }
 
-    void Flip()
+    void ChasePlayer()
+    {
+        anim.SetFloat("xVelocity", rb.linearVelocity.x);
+        CollisionCheck();
+
+        Vector2 playerDirection = (Player.transform.position - transform.position).normalized;
+        rb.linearVelocity = new Vector2((moveSpeed*1.5f) * playerDirection.x, rb.linearVelocity.y);
+
+        if (isWallDetected || !groundDetected)
+        {
+            Flip();
+            idleTimeCounter = idleTime;
+            Agro = false;
+        }
+    }
+
+    public void Flip()
     {
         facingDirection = -facingDirection;
 
