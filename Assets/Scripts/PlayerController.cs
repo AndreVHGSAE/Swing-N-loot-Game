@@ -9,17 +9,20 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
 
     public GameObject graple;
+    public Transform grapleSpawnPoint;
 
     public float respawnPointX;
     public float respawnPointY;
 
     public int coins;
     public int lives;
-    public int energy=100;
+    public int energy = 100;
+    float gravityScale;
     //public List<GameObject> bulletPool = new List<GameObject>();
 
     [Header("Move Info")]
     [SerializeField] private float speed = 5;
+    [SerializeField] private float swingSpeed = 10;
     [SerializeField] private float JumpForce = 8;
 
     [SerializeField] private bool canMove = true;
@@ -55,6 +58,8 @@ public class PlayerController : MonoBehaviour
 
         respawnPointX = transform.position.x;
         respawnPointY = transform.position.x;
+
+        gravityScale = rb.gravityScale;
     }
 
     // Update is called once per frame
@@ -108,18 +113,23 @@ public class PlayerController : MonoBehaviour
         if (canMove == true)
         {
             movingInput = Input.GetAxisRaw("Horizontal");
-            if(!isWallSliding)
+            if (!isWallSliding)
                 Shoot();
         }
 
     }
 
-    private IEnumerator MoveLock()
+    private IEnumerator MoveLock(float waitTime)
     {
         canMove = false;
-        yield return new WaitForSeconds(MoveLockTime);
+        yield return new WaitForSeconds(waitTime);
         canMove = true;
+        if (rb.gravityScale <= 0)
+        {
+            rb.gravityScale = gravityScale;
+        }
     }
+
 
     //private void SetBulletPool(GameObject bulletPrefab, Vector3 startPosition, List<GameObject> _bulletPool)
     //{
@@ -194,7 +204,7 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(LockRoutine);
         }
 
-        LockRoutine = StartCoroutine(MoveLock());
+        LockRoutine = StartCoroutine(MoveLock(MoveLockTime));
 
         rb.AddForce(direction, ForceMode2D.Impulse);
     }
@@ -203,17 +213,33 @@ public class PlayerController : MonoBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame && energy > 0)
         {
-            //GameObject temp = GetBullet();
-            GameObject temp = Instantiate(graple, transform.position, transform.rotation);
+            GameObject temp = Instantiate(graple, grapleSpawnPoint.position, transform.rotation);
             temp.SetActive(true);
-            temp.transform.position = transform.position;
+            temp.transform.position = grapleSpawnPoint.position;
             temp.transform.rotation = transform.rotation;
             Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
             rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
             temp.GetComponent<Graple>().Init(this);
             energy--;
+            canMove = false;
+            rb.gravityScale = 0;
         }
     }
+
+    public void Swing(Vector3 swingPoint)
+    {
+        Vector2 swingDirection = (swingPoint - transform.position);
+        if (LockRoutine != null)
+        {
+            StopCoroutine(LockRoutine);
+        }
+        
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(swingDirection.normalized * swingSpeed, ForceMode2D.Impulse);
+        float timeToPoint = swingDirection.magnitude/(0+swingSpeed);
+        LockRoutine = StartCoroutine(MoveLock(timeToPoint));
+    }
+
     private void CollisionCheck()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);

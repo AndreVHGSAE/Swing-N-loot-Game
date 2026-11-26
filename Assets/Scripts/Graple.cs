@@ -1,10 +1,14 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class Graple : MonoBehaviour
 {
     Rigidbody2D rb;
     PlayerController player;
+    float lifeTime = 2;
     
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -18,7 +22,13 @@ public class Graple : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         rb.linearVelocity = Vector3.zero;
-        Vector2 playerDirection = (transform.position - player.transform.position).normalized;
-        player.rb.linearVelocity = playerDirection * 6;
+        player.Swing(transform.position);
+        StartCoroutine(Lifetime());
+    }
+
+    private IEnumerator Lifetime()
+    {
+        yield return new WaitForSeconds(lifeTime);
+        Destroy(this.gameObject);
     }
 }
