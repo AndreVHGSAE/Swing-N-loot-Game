@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class DmgObstacle : MonoBehaviour
 {
+    PlayerController Player;
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
-            Debug.Log("Damaged");
+            collision.gameObject.GetComponent<PlayerController>().Died();
         }
     }
 }

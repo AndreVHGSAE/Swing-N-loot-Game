@@ -8,9 +8,14 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     public Rigidbody2D rb;
 
-    public GameObject bullet;
+    public GameObject graple;
+
+    public float respawnPointX;
+    public float respawnPointY;
 
     public int coins;
+    public int lives;
+    public int energy=100;
     //public List<GameObject> bulletPool = new List<GameObject>();
 
     [Header("Move Info")]
@@ -18,16 +23,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float JumpForce = 8;
 
     [SerializeField] private bool canMove = true;
-    [SerializeField] private float MoveLockTime = 0.5f;
+    [SerializeField] private float MoveLockTime = 0.05f;
     private Coroutine LockRoutine;
 
     [SerializeField] private bool canWallSlide;
     [SerializeField] private bool canWallJump = true;
     [SerializeField] private bool isWallSliding;
-    
+
     public bool facingRight = true;
     [SerializeField] private float movingInput;
-    public int facingDirection = 1 ;
+    public int facingDirection = 1;
     [SerializeField] private Vector2 wallJumpDirection;
 
     [Header("CollisionInfo")]
@@ -47,6 +52,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         //SetBulletPool(bullet, transform.position, bulletPool);
+
+        respawnPointX = transform.position.x;
+        respawnPointY = transform.position.x;
     }
 
     // Update is called once per frame
@@ -62,7 +70,7 @@ public class PlayerController : MonoBehaviour
     {
         bool isMoving = movingInput != 0;
 
-        anim.SetFloat("yVelocity",rb.linearVelocity.y);
+        anim.SetFloat("yVelocity", rb.linearVelocity.y);
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsMoving", isMoving);
         anim.SetBool("IsWallSliding", isWallSliding);
@@ -98,18 +106,12 @@ public class PlayerController : MonoBehaviour
         }
 
         if (canMove == true)
-            movingInput = Input.GetAxisRaw("Horizontal");
-
-        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            //GameObject temp = GetBullet();
-            GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
-            temp.SetActive(true);
-            temp.transform.position = transform.position;
-            temp.transform.rotation = transform.rotation;
-            Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
-            rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
+            movingInput = Input.GetAxisRaw("Horizontal");
+            if(!isWallSliding)
+                Shoot();
         }
+
     }
 
     private IEnumerator MoveLock()
@@ -148,7 +150,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         if (canMove == true)
-        rb.linearVelocity = new Vector2(movingInput * speed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(movingInput * speed, rb.linearVelocity.y);
     }
 
     void FlipController()
@@ -196,6 +198,22 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(direction, ForceMode2D.Impulse);
     }
+
+    private void Shoot()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame && energy > 0)
+        {
+            //GameObject temp = GetBullet();
+            GameObject temp = Instantiate(graple, transform.position, transform.rotation);
+            temp.SetActive(true);
+            temp.transform.position = transform.position;
+            temp.transform.rotation = transform.rotation;
+            Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
+            rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
+            temp.GetComponent<Graple>().Init(this);
+            energy--;
+        }
+    }
     private void CollisionCheck()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
@@ -213,6 +231,20 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance,
                                                         wallCheck.position.y,
                                                         wallCheck.position.z));
+    }
+
+    public void SetRespawn()
+    {
+        respawnPointX = transform.position.x;
+        respawnPointY = transform.position.y;
+    }
+
+    public void Died()
+    {
+        //Vector2 direction = new Vector2(wallJumpDirection.x * -transform.right.x, wallJumpDirection.y);
+        //canMove = false;
+        lives--;
+        transform.position = new Vector3(respawnPointX, respawnPointY, 0);
     }
 }
 
