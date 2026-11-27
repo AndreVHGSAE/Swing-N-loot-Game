@@ -74,7 +74,16 @@ public class PlayerController : MonoBehaviour
         FlipController();
         CollisionCheck();
         AnimatorController();
+        UIUpdate();
+    }
+
+    private void UIUpdate()
+    {
         UIScript.Lives(lives);
+        UIScript.Money(coins);
+        if (energy > 1)
+            energy = 1;
+        UIScript.Energy(energy);
     }
 
     private void AnimatorController()
@@ -308,6 +317,13 @@ public class PlayerController : MonoBehaviour
             //Time.timeScale = 0;
             SceneManager.LoadScene(0);
         }
+    }
+
+    public void Win()
+    {
+        canMove = false;
+        UIScript.WinSequence(coins, lives);
+        Time.timeScale = 0;
     }
 }
 
