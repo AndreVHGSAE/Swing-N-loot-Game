@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public int coins;
     public int lives;
     public int energy = 100;
+    public int defeatedEnemies = 0;
     public float gravityScale;
     //public List<GameObject> bulletPool = new List<GameObject>();
 
@@ -118,7 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            Jump();
+            Jump(JumpForce);
         }
         else if (Input.GetKeyDown(KeyCode.Space) && isWallSliding && canWallJump)
         {
@@ -144,32 +145,6 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravityScale;
         }
     }
-
-    //private void SetBulletPool(GameObject bulletPrefab, Vector3 startPosition, List<GameObject> _bulletPool)
-    //{
-    //    for (int i = 0; i < 10; i++)
-    //    {
-    //        GameObject temp = Instantiate(bulletPrefab, startPosition, transform.rotation);
-    //        temp.SetActive(false);
-    //        _bulletPool.Add(temp);
-    //    }
-    //}
-
-    //GameObject GetBullet()
-    //{
-    //    Debug.Log("GettingNormalBullet");
-
-    //    foreach (GameObject b in bulletPool)
-    //    {
-    //        if (b.activeInHierarchy == false)
-    //        {
-    //            return b;
-    //        }
-    //    }
-    //    GameObject temp = Instantiate(bullet, transform.position, transform.rotation);
-    //    temp.SetActive(false);
-    //    return temp;
-    //}
 
     private void Move()
     {
@@ -202,9 +177,9 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, 180, 0);
     }
 
-    private void Jump()
+    private void Jump(float JumpMagnitude)
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpMagnitude);
     }
 
     private void WallJump()
@@ -322,7 +297,7 @@ public class PlayerController : MonoBehaviour
     public void Win()
     {
         canMove = false;
-        UIScript.WinSequence(coins, lives);
+        UIScript.WinSequence(coins, lives, defeatedEnemies);
         Time.timeScale = 0;
     }
 }

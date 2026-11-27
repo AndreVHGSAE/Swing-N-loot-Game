@@ -69,6 +69,8 @@ public class BasicEnemy : MonoBehaviour
 
         if (hp <= 0)
         {
+            if (!knockedOut)
+                Player.gameObject.GetComponent<PlayerController>().defeatedEnemies++;
             knockedOut = true;
             anim.SetBool("knockedOut", knockedOut);
         }

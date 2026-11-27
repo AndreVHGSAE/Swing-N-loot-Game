@@ -20,7 +20,7 @@ public class ShootingEnemy : BasicEnemy
             temp.transform.rotation = transform.rotation;
             Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
             Vector2 playerDirection = (Player.transform.position - temp.transform.position).normalized;
-            //playerDirection.y = transform.position.y;
+            playerDirection.y = 0;
             rbtemp.AddForce(playerDirection * 10, ForceMode2D.Impulse);
             BulletCooldownTimer = 0;
         }
