@@ -1,12 +1,15 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     public Animator anim;
     public Rigidbody2D rb;
+    public UIScript UIScript;
 
     public GameObject graple;
     public Transform grapleSpawnPoint;
@@ -17,17 +20,19 @@ public class PlayerController : MonoBehaviour
     public int coins;
     public int lives;
     public int energy = 100;
-    float gravityScale;
+    public float gravityScale;
     //public List<GameObject> bulletPool = new List<GameObject>();
 
     [Header("Move Info")]
     [SerializeField] private float speed = 5;
-    [SerializeField] private float swingSpeed = 10;
+    [SerializeField] private float swingSpeed = 16;
     [SerializeField] private float JumpForce = 8;
 
-    [SerializeField] private bool canMove = true;
+    [SerializeField] public bool canMove = true;
     [SerializeField] private float MoveLockTime = 0.05f;
     private Coroutine LockRoutine;
+    [SerializeField] private float DyingTime = 3;
+    private bool dying = false;
 
     [SerializeField] private bool canWallSlide;
     [SerializeField] private bool canWallJump = true;
@@ -54,7 +59,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
-        //SetBulletPool(bullet, transform.position, bulletPool);
+        UIScript.Lives(lives);
 
         respawnPointX = transform.position.x;
         respawnPointY = transform.position.x;
@@ -69,6 +74,7 @@ public class PlayerController : MonoBehaviour
         FlipController();
         CollisionCheck();
         AnimatorController();
+        UIScript.Lives(lives);
     }
 
     private void AnimatorController()
@@ -119,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private IEnumerator MoveLock(float waitTime)
+    public IEnumerator MoveLock(float waitTime)
     {
         canMove = false;
         yield return new WaitForSeconds(waitTime);
@@ -129,7 +135,6 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravityScale;
         }
     }
-
 
     //private void SetBulletPool(GameObject bulletPrefab, Vector3 startPosition, List<GameObject> _bulletPool)
     //{
@@ -218,11 +223,12 @@ public class PlayerController : MonoBehaviour
             temp.transform.position = grapleSpawnPoint.position;
             temp.transform.rotation = transform.rotation;
             Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
-            rbtemp.AddForce(transform.right * 40, ForceMode2D.Impulse);
+            rbtemp.AddForce(transform.right * 30, ForceMode2D.Impulse);
             temp.GetComponent<Graple>().Init(this);
             energy--;
             canMove = false;
             rb.gravityScale = 0;
+            rb.linearVelocity = Vector2.zero;
         }
     }
 
@@ -267,10 +273,41 @@ public class PlayerController : MonoBehaviour
 
     public void Died()
     {
-        //Vector2 direction = new Vector2(wallJumpDirection.x * -transform.right.x, wallJumpDirection.y);
-        //canMove = false;
-        lives--;
+        if (!dying)
+        {
+            lives--;
+            UIScript.Lives(lives);
+            StartCoroutine(DyingRoutine());
+        }
+    }
+
+    public IEnumerator DyingRoutine()
+    {
+        canMove = false;
+        dying = true;
+        anim.SetBool("dying", dying);
+
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForceY(10);
+        float dir = facingDirection;
+        rb.AddForceX(dir * 100);
+
+        yield return new WaitForSeconds(DyingTime);
+
+        CheckIfGameOver();
+        dying = false;
+        anim.SetBool("dying", dying);
+        canMove = true;
         transform.position = new Vector3(respawnPointX, respawnPointY, 0);
+    }
+
+    public void CheckIfGameOver()
+    {
+        if (lives <= 0)
+        {
+            //Time.timeScale = 0;
+            SceneManager.LoadScene(0);
+        }
     }
 }
 

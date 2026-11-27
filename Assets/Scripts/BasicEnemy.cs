@@ -6,8 +6,14 @@ using UnityEngine;
 public class BasicEnemy : MonoBehaviour
 {
     public GameObject Player;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator anim;
+
+    public int hp = 3;
+    public float stunTime = 2;
+    public float stunTimeCounter =0;
+    public bool stunned = false;
+    public bool knockedOut = false;
 
     [Header("Move info")]
     [SerializeField] private float moveSpeed;
@@ -39,13 +45,35 @@ public class BasicEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!Agro)
-            Patrol();
-        else
-            ChasePlayer();
+        if (!knockedOut && !stunned)
+        {
+            if (!Agro)
+                Patrol();
+            else
+                ChasePlayer();
+        }
+
+
+        if (stunned)
+        {
+            anim.SetBool("stunned", stunned);
+            stunTimeCounter += Time.deltaTime;
+            if (stunTimeCounter >= stunTime)
+            {
+                stunned = false;
+                anim.SetBool("stunned", stunned);
+                stunTimeCounter = 0;
+            }
+        }
+
+        if (hp <= 0)
+        {
+            knockedOut = true;
+            anim.SetBool("knockedOut", knockedOut);
+        }
     }
 
-    void Patrol()
+    protected virtual void Patrol()
     {
         anim.SetFloat("xVelocity", rb.linearVelocity.x);
         CollisionCheck();
@@ -78,6 +106,12 @@ public class BasicEnemy : MonoBehaviour
             idleTimeCounter = idleTime;
             Agro = false;
         }
+    }
+
+    public void TakeDamage()
+    {
+        hp--;
+        stunned = true;
     }
 
     public void Flip()

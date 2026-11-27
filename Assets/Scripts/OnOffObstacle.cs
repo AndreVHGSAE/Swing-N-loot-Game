@@ -4,7 +4,7 @@ public class OnOffObstacle : DmgObstacle
 {
     private Animator anim;
 
-    private bool isWorking;
+    public bool isWorking;
 
     [SerializeField] private float cooldown;
     [SerializeField] private float cooldownTimer;
@@ -12,7 +12,12 @@ public class OnOffObstacle : DmgObstacle
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         if (isWorking)
-            base.OnTriggerEnter2D(collision);
+        {
+            if (collision.tag == "Player")
+            {
+                collision.gameObject.GetComponent<PlayerController>().Died();
+            }
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,7 +31,7 @@ public class OnOffObstacle : DmgObstacle
     {
         cooldownTimer -= Time.deltaTime;
 
-        if (cooldownTimer < 0)
+        if (cooldownTimer <= 0)
         {
             isWorking = !isWorking;
             cooldownTimer = cooldown;

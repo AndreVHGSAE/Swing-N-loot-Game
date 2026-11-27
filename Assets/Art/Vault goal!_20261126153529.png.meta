@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4b316619e6bd8024eb99558c2ac0880e
+guid: 2b0f693d9273c2046b2f470d4db33b0e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5210800567518843958
-    second: Energy animation_20261125135842_0
+      213: -389327365296440643
+    second: Vault goal!_20261126153529_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Energy animation_20261125135842_0
+      name: Vault goal!_20261126153529_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 16
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: acba2a9ed748fa7b0800000000000000
-      internalID: -5210800567518843958
+      spriteID: dbaba22f2d4d89af0800000000000000
+      internalID: -389327365296440643
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Energy animation_20261125135842_0: -5210800567518843958
+      Vault goal!_20261126153529_0: -389327365296440643
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
