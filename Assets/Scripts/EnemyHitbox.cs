@@ -17,7 +17,7 @@ public class EnemyHitbox : DmgObstacle
                 EnemyBasic.TakeDamage();
                 EnemyBasic.rb.AddForceY(10);
                 float dir = Mathf.Sign((transform.position - collision.transform.position).x);
-                EnemyBasic.rb.AddForceX(dir*10);
+                EnemyBasic.rb.AddForceX(dir*3);
             }
         }
     }

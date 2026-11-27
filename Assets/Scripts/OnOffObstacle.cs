@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class OnOffObstacle : DmgObstacle 
 {
-    private Animator anim;
+    public Animator anim;
 
     public bool isWorking;
 
