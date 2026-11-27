@@ -1737,7 +1737,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 444704256}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4323,6 +4323,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 918302695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1165180702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1165180703}
+  m_Layer: 7
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1165180703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165180702}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.36, y: -0.12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1738329487}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1197007498
 GameObject:
   m_ObjectHideFlags: 0
@@ -4472,7 +4503,7 @@ GameObject:
   - component: {fileID: 1206948314}
   - component: {fileID: 1206948313}
   - component: {fileID: 1206948312}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4775,7 +4806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1384580912}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5461,7 +5492,7 @@ GameObject:
   - component: {fileID: 1738329484}
   - component: {fileID: 1738329483}
   - component: {fileID: 1738329482}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shooting Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5487,7 +5518,7 @@ MonoBehaviour:
   stunTimeCounter: 0
   stunned: 0
   knockedOut: 0
-  moveSpeed: 0
+  moveSpeed: 3
   idleTime: 2
   idleTimeCounter: 0
   Agro: 0
@@ -5499,6 +5530,10 @@ MonoBehaviour:
   groundCheck: {fileID: 1384580912}
   wallCheck: {fileID: 444704256}
   PlayerCheck: {fileID: 1206948311}
+  bullet: {fileID: 1200148078801356665, guid: 98afd2f26d6527f4782b2ba9ee09200c, type: 3}
+  bulletSpawnPoint: {fileID: 1165180703}
+  BulletCooldown: 2
+  BulletCooldownTimer: 0
 --- !u!95 &1738329483
 Animator:
   serializedVersion: 7
@@ -5662,7 +5697,7 @@ Transform:
   m_GameObject: {fileID: 1738329481}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.44, y: -4.55, z: 0}
+  m_LocalPosition: {x: -18.09, y: -2.28, z: 0}
   m_LocalScale: {x: -1.2811315, y: 1.2696396, z: 1.2912028}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5670,6 +5705,7 @@ Transform:
   - {fileID: 1384580912}
   - {fileID: 1408657524}
   - {fileID: 1206948314}
+  - {fileID: 1165180703}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1745785556
@@ -7478,7 +7514,7 @@ Transform:
   m_GameObject: {fileID: 2051599299}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.734, y: -2.38, z: 0}
+  m_LocalPosition: {x: -27.53, y: -4.25, z: 0}
   m_LocalScale: {x: -1.2811315, y: 1.2696396, z: 1.2912028}
   m_ConstrainProportionsScale: 0
   m_Children:
