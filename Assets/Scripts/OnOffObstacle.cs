@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class OnOffObstacle : DmgObstacle 
 {
-    private Animator anim;
+    public Animator anim;
+    public Animator anim2;
 
     public bool isWorking;
 
@@ -38,6 +39,7 @@ public class OnOffObstacle : DmgObstacle
         }
 
         anim.SetBool("isWorking", isWorking);
+        anim2.SetBool("isWorking", isWorking);
 
         if (isWorking)
         {

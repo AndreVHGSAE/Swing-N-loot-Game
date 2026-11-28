@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float JumpForce = 8;
 
     [SerializeField] public bool canMove = true;
+    [SerializeField] public bool isShooting = false;
     [SerializeField] private float MoveLockTime = 0.05f;
     private Coroutine LockRoutine;
     [SerializeField] private float DyingTime = 3;
@@ -95,6 +96,15 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsMoving", isMoving);
         anim.SetBool("IsWallSliding", isWallSliding);
+        if (rb.gravityScale == 0)
+        {
+            isShooting = true;
+        }
+        else
+        {
+            isShooting = false;
+        }
+        anim.SetBool("isShooting", isShooting);
     }
 
     void FixedUpdate()
@@ -177,7 +187,7 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, 180, 0);
     }
 
-    private void Jump(float JumpMagnitude)
+    public void Jump(float JumpMagnitude)
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpMagnitude);
     }

@@ -7,7 +7,7 @@ public class BasicEnemy : MonoBehaviour
 {
     public GameObject Player;
     public Rigidbody2D rb;
-    private Animator anim;
+    public Animator anim;
 
     public int hp = 3;
     public float stunTime = 2;
@@ -16,9 +16,9 @@ public class BasicEnemy : MonoBehaviour
     public bool knockedOut = false;
 
     [Header("Move info")]
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float idleTime = 2;
-    [SerializeField] private float idleTimeCounter;
+    [SerializeField] public float moveSpeed;
+    [SerializeField] public float idleTime = 2;
+    [SerializeField] public float idleTimeCounter;
 
     public bool Agro = false;
 
