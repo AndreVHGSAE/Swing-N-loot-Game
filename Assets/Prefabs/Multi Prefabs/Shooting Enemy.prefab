@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be8bee08f1df08046a6234677f0f3588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingEnemy
-  Player: {fileID: 0}
+  Player: {fileID: 1734486870827953632, guid: bd314a93c020584489c22255f44f3a13, type: 3}
   rb: {fileID: 533288958132673360}
   anim: {fileID: 1852696480003434908}
   hp: 3

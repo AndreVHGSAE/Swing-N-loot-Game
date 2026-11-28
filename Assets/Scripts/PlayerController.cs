@@ -218,6 +218,8 @@ public class PlayerController : MonoBehaviour
             temp.transform.rotation = transform.rotation;
             Rigidbody2D rbtemp = temp.GetComponent<Rigidbody2D>();
             rbtemp.AddForce(transform.right * 30, ForceMode2D.Impulse);
+            if (Input.GetKey(KeyCode.W))
+                rbtemp.AddForce(transform.up * 20, ForceMode2D.Impulse);
             temp.GetComponent<Graple>().Init(this);
             energy--;
             canMove = false;
